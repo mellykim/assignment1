@@ -64,7 +64,7 @@
 
         echo "<span>Max: </span>";
         echo "<select name = 'maxyear'>";
-        for ($i = $result; $i <= $result2; $i++){echo "<option value ='".$i."'>$i</option>";}
+        for ($i = $result2; $i >= $result; $i--){echo "<option value ='".$i."'>$i</option>";}
         echo "</select><br/>";
 ?>
 
@@ -95,7 +95,9 @@
 ?>
 	<input type="submit" name="submit" value="Submit" /><br/>
 	</form>
-
+<?php
+echo $wine;
+?>
 
 </div> <!-- close contentarea -->
 <div class = "footer"></div> <!-- close footer -->
