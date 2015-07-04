@@ -1,27 +1,5 @@
-<?
-session_start();
-?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-<!-- Declaring the doctype of the web pages which is XHTML Strict 1.0 -->
-
-<head>
-<title></title>
-<link type="text/css" rel="stylesheet" href="stylesheet.css" /> <!-- links to the css stylesheet that the website is using-->
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-</head>
-
-<body>
-
-<div class="container">
-
-<div class = "header"></div> <!-- close header -->
-<div class = "menu"></div> <!-- close menu -->
-<div class = "contentarea">
-
 <?php
+session_start();
 require_once('php/db.php');
 $pdo = new PDO('mysql:host=localhost;dbname=winestore', DB_USER, DB_PW);
 if (!pdo){echo "Please try later";
@@ -37,8 +15,6 @@ $minstock = $_GET["minwinesinstock"];
 $minorder = $_GET["minwinesordered"];
 $dollarrangelow = $_GET["mincost"];
 $dollarrangemax = $_GET["maxcost"];
-
-
 
 $query = "SELECT DISTINCT w.wine_id, w.wine_name, w.year, v.varieties, y.winery_name, r.region_name, i.Inventorycost, i.cost, i.on_hand, j.Stocksold, j.revenue
         FROM wine w
@@ -70,6 +46,7 @@ $query = "SELECT DISTINCT w.wine_id, w.wine_name, w.year, v.varieties, y.winery_
 ";
 
 $statement = array();
+
 if (!empty($wine)) {$statement[] = "w.wine_name ='$wine'";};
 if (!empty($wineryname)) {$statement[] = "w.winery_name = '$winery'";};
 if ($region != "All") {$statement[] = "r.region_name = '$region'";};
@@ -77,48 +54,24 @@ if ($grapevariety != "All") {$statement[] = "v.varieties LIKE '$grapevariety%'";
 if (!empty($minstock)) {$statement[] = "i.on_hand >= '$minstock'";};
 if (count($statement) > 0){$query .= ' AND ' .implode(' AND ', $statement);}
 $query .= ';';
+
 $result = $pdo->query($query);
 $result->execute();
 
-echo "<table border='1'>
-<tr>
-<th>Wine ID</th>
-<th>Wine Name</th>
-<th>Wine Year</th>
-<th>Wine Variety</th>
-<th>Winery Name</th>
-<th>Region Name</th>
-<th>Cost In Inventory</th>
-<th>Total Stock Sold</th>
-<th>Total Wine Sales</th>
-<th>*Wine Cost</th>
-<th>*On Hand</th>
-</tr>";
-
+unset($_SESSION['queryresult']);
 while ($row = $result->fetch(PDO::FETCH_ASSOC))
 {
-	echo "<tr>";
-	echo "<td>".$row['wine_id']."</td>";
-	echo "<td>".$row['wine_name']."</td>";
-	echo "<td>".$row['year']."</td>";
-	echo "<td>".$row['varieties']."</td>";
-	echo "<td>".$row['winery_name']."</td>";
-	echo "<td>".$row['region_name']."</td>";
-	echo "<td>".$row['Inventorycost']."</td>";
-	echo "<td>".$row['Stocksold']."</td>";
-	echo "<td>".$row['revenue']."</td>";
-	echo "<td>".$row['cost']."</td>";
-	echo "<td>".$row['on_hand']."</td>";
-	echo "</tr>";	
-
-}
+	$_SESSION['queryresult'][] = array
+	(
+	      	$row['wine_id'], $row['wine_name'], $row['year'], $row['varieties'], 
+		$row['winery_name'], $row['region_name'], $row['Inventorycost'],
+     		$row['Stocksold'], $row['revenue']
+	);
+} 
 
 
+header('location: result.php');
+exit();
 ?>
 
-</div> <!-- close contentarea -->
-<div class = "footer"></div> <!-- close footer -->
-
-</div> <!-- close container -->
-</html>
 

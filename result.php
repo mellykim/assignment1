@@ -1,3 +1,7 @@
+<?php 
+session_start();
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -17,40 +21,33 @@
 <div class = "menu"></div> <!-- close menu --> 
 <div class = "contentarea">
 
+<?php
 
-echo "<table border='1'>
-<tr>
-<th>Wine ID</th>
-<th>Wine Name</th>
-<th>Wine Year</th>
-<th>Wine Variety</th>
-<th>Winery Name</th>
-<th>Region Name</th>
-<th>Cost In Inventory</th>
-<th>Total Stock Sold</th>
-<th>Total Wine Sales</th>
-<th>*Wine Cost</th>
-<th>*On Hand</th>
-</tr>";
+	echo "<table border='1'>
+	<tr>
+	<th>Wine ID</th>
+	<th>Wine Name</th>
+	<th>Wine Year</th>
+	<th>Wine Variety</th>
+	<th>Winery Name</th>
+	<th>Region Name</th>
+	<th>Cost In Inventory</th>
+	<th>Total Stock Sold</th>
+	<th>Total Wine Sales</th>
+	</tr>";
 
-while ($row = $result->fetch(PDO::FETCH_ASSOC))
-{
-        echo "<tr>";
-        echo "<td>".$row['wine_id']."</td>";
-        echo "<td>".$row['wine_name']."</td>";
-        echo "<td>".$row['year']."</td>";
-        echo "<td>".$row['varieties']."</td>";
-        echo "<td>".$row['winery_name']."</td>";
-        echo "<td>".$row['region_name']."</td>";
-        echo "<td>".$row['Inventorycost']."</td>";
-        echo "<td>".$row['Stocksold']."</td>";
-        echo "<td>".$row['revenue']."</td>";
-        echo "<td>".$row['cost']."</td>";
-        echo "<td>".$row['on_hand']."</td>";
-        echo "</tr>";
+	foreach($_SESSION['queryresult'] as $row)
+	{
+  		echo"<tr>";
+  		foreach($row as $cell) 
+		{
+    			echo("<td>" . $cell . "</td>");
+  		}
+  		echo"</tr>";
+	}
+	echo "</table>";
 
-}
-
+?>
 
 
 </div> <!-- close contentarea -->
@@ -58,4 +55,5 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC))
 
 </div> <!-- close container -->
 </html>
+
 
