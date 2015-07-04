@@ -1,3 +1,7 @@
+<?
+session_start();
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -35,55 +39,46 @@ $dollarrangelow = $_GET["mincost"];
 $dollarrangemax = $_GET["maxcost"];
 
 
-//if (empty($wine)){$wine = "%";}
-//if (empty($winery)){$winery = "%";}
-//if (empty($region)){$region = "%";}
-//if (empty($grapevariety)){$grapevariety = "%";}
 
-
-$query = "
-SELECT DISTINCT w.wine_id, w.wine_name, w.year, v.varieties, y.winery_name, r.region_name, i.Inventorycost, j.Stocksold, j.revenue
+$query = "SELECT DISTINCT w.wine_id, w.wine_name, w.year, v.varieties, y.winery_name, r.region_name, i.Inventorycost, i.cost, i.on_hand, j.Stocksold, j.revenue
         FROM wine w
         INNER JOIN
-        	(SELECT a.wine_id, GROUP_CONCAT(DISTINCT variety SEPARATOR '|') as Varieties
+        	(SELECT a.wine_id, GROUP_CONCAT(DISTINCT variety SEPARATOR ' | ') as Varieties
         	from wine a
         	INNER JOIN wine_variety b ON a.wine_id=b.wine_id
         	INNER JOIN grape_variety c ON b.variety_id=c.variety_id
         	GROUP BY a.wine_id
         	) v ON v.wine_id = w.wine_id
 	INNER JOIN 
-		(SELECT e.wine_id, SUM(d.on_hand * d.cost) AS Inventorycost
+		(SELECT e.wine_id, d.cost, d.on_hand, SUM(d.on_hand * d.cost) AS Inventorycost
 		 FROM wine e
 		 INNER JOIN inventory d ON e.wine_id = d.wine_id
 		 GROUP BY e.wine_id
 		) i on i.wine_id = w.wine_id
-	INNER JOIN
+	LEFT JOIN
 		(SELECT f.wine_id, SUM(g.qty) AS Stocksold, SUM(g.price) AS revenue
 		FROM wine f
 		INNER JOIN items g ON f.wine_id = g.wine_id
 		GROUP BY f.wine_id
 		) j on j.wine_id = w.wine_id
-
         INNER JOIN winery y ON w.winery_id = y.winery_id
         INNER JOIN region r ON y.region_id = r.region_id
-	WHERE w.year >= '$minyear'
+	WHERE w.year >= '$minyear' AND w.year <= '$maxyear'
+	AND i.cost >= '$dollarrangelow' AND i.cost <= '$dollarrangemax'
+
+
 ";
 
 $statement = array();
-if (!empty($wine)) {$statement[] = "w.wine_name ='$wine'"     ; };
- 
-if (count($statement) > 0)
-{
-	$query .= ' AND ' .implode(' AND ', $statement);
-}
-
+if (!empty($wine)) {$statement[] = "w.wine_name ='$wine'";};
+if (!empty($wineryname)) {$statement[] = "w.winery_name = '$winery'";};
+if ($region != "All") {$statement[] = "r.region_name = '$region'";};
+if ($grapevariety != "All") {$statement[] = "v.varieties LIKE '$grapevariety%'";}; 
+if (!empty($minstock)) {$statement[] = "i.on_hand >= '$minstock'";};
+if (count($statement) > 0){$query .= ' AND ' .implode(' AND ', $statement);}
 $query .= ';';
-    
-
 $result = $pdo->query($query);
 $result->execute();
-
-//echo $query;
 
 echo "<table border='1'>
 <tr>
@@ -96,6 +91,8 @@ echo "<table border='1'>
 <th>Cost In Inventory</th>
 <th>Total Stock Sold</th>
 <th>Total Wine Sales</th>
+<th>*Wine Cost</th>
+<th>*On Hand</th>
 </tr>";
 
 while ($row = $result->fetch(PDO::FETCH_ASSOC))
@@ -110,6 +107,8 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC))
 	echo "<td>".$row['Inventorycost']."</td>";
 	echo "<td>".$row['Stocksold']."</td>";
 	echo "<td>".$row['revenue']."</td>";
+	echo "<td>".$row['cost']."</td>";
+	echo "<td>".$row['on_hand']."</td>";
 	echo "</tr>";	
 
 }

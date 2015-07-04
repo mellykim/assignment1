@@ -18,7 +18,38 @@
 <div class = "contentarea">
 
 
-$myvariable = $_POST["postvariable"];
+echo "<table border='1'>
+<tr>
+<th>Wine ID</th>
+<th>Wine Name</th>
+<th>Wine Year</th>
+<th>Wine Variety</th>
+<th>Winery Name</th>
+<th>Region Name</th>
+<th>Cost In Inventory</th>
+<th>Total Stock Sold</th>
+<th>Total Wine Sales</th>
+<th>*Wine Cost</th>
+<th>*On Hand</th>
+</tr>";
+
+while ($row = $result->fetch(PDO::FETCH_ASSOC))
+{
+        echo "<tr>";
+        echo "<td>".$row['wine_id']."</td>";
+        echo "<td>".$row['wine_name']."</td>";
+        echo "<td>".$row['year']."</td>";
+        echo "<td>".$row['varieties']."</td>";
+        echo "<td>".$row['winery_name']."</td>";
+        echo "<td>".$row['region_name']."</td>";
+        echo "<td>".$row['Inventorycost']."</td>";
+        echo "<td>".$row['Stocksold']."</td>";
+        echo "<td>".$row['revenue']."</td>";
+        echo "<td>".$row['cost']."</td>";
+        echo "<td>".$row['on_hand']."</td>";
+        echo "</tr>";
+
+}
 
 
 
