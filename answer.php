@@ -5,8 +5,12 @@ $pdo = new PDO('mysql:host=localhost;dbname=winestore', DB_USER, DB_PW);
 if (!pdo){echo "Please try later";
           die("Could Not Connect");}
 
+function validate_input($string){
+ 	if (preg_match("/^[A-Za-z0-9' ]{0,50}$/", $string)){return true;}
+	else{return false;}}
+
 $wine = $_GET["winename"];
-$winery = $_GET["wineryname"];
+$winery = htmlentities(trim($_GET["wineryname"]));
 $region = $_GET["region"];
 $grapevariety = $_GET["grapevariety"];
 $minyear = $_GET["minyear"];
@@ -15,6 +19,17 @@ $minstock = $_GET["minwinesinstock"];
 $minorder = $_GET["minwinesordered"];
 $dollarrangelow = $_GET["mincost"];
 $dollarrangemax = $_GET["maxcost"];
+
+//VALIDATE FIELDS 
+if (!empty($wine)){if (validate_input($wine)=== false) {header('location: php/error.php');
+		die();}}
+if (!empty($winery)){if (validate_input($winery)===false) {header('location: php/error.php');
+		die();}}
+if (!empty($minstock)) {if (!is_numeric($minstock)){header('location:php/error.php');
+		die();}}
+if (!empty($minorder)) {if (!is_numeric($minorder)){header('location:php/error.php');
+		die();}}
+
 
 $query = "SELECT DISTINCT w.wine_id, w.wine_name, w.year, v.varieties, y.winery_name, r.region_name, i.Inventorycost, i.cost, i.on_hand, j.Stocksold, j.revenue
         FROM wine w
@@ -48,7 +63,7 @@ $query = "SELECT DISTINCT w.wine_id, w.wine_name, w.year, v.varieties, y.winery_
 $statement = array();
 
 if (!empty($wine)) {$statement[] = "w.wine_name ='$wine'";};
-if (!empty($wineryname)) {$statement[] = "w.winery_name = '$winery'";};
+if (!empty($winery)) {$statement[] = "y.winery_name = '$winery'";};
 if ($region != "All") {$statement[] = "r.region_name = '$region'";};
 if ($grapevariety != "All") {$statement[] = "v.varieties LIKE '$grapevariety%'";}; 
 if (!empty($minstock)) {$statement[] = "i.on_hand >= '$minstock'";};
