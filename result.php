@@ -9,7 +9,7 @@ session_start();
 
 <head> 
 <title></title>
-<link type="text/css" rel="stylesheet" href="stylesheet.css" /> <!-- links to the css stylesheet that the website is using--> 
+<link type="text/css" rel="stylesheet" href="css/stylesheet.css" /> <!-- links to the css stylesheet that the website is using--> 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 </head>
 
@@ -19,7 +19,7 @@ session_start();
 
 <div class = "header"></div> <!-- close header -->
 <div class = "menu"></div> <!-- close menu --> 
-<div class = "contentarea">
+<div class = "resultarea">
 
 <?php
 

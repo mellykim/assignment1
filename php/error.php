@@ -11,7 +11,7 @@ session_start();
 
 <head>
 <title></title>
-<link type="text/css" rel="stylesheet" href="css/stylesheet.css" /> <!-- links to the css stylesheet that the website is using-->
+<link type="text/css" rel="stylesheet" href="../css/stylesheet.css" /> <!-- links to the css stylesheet that the website is using-->
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 </head>
 
@@ -22,10 +22,11 @@ session_start();
 <div class = "header"></div> <!-- close header -->
 <div class = "menu"></div> <!-- close menu -->
 <div class = "contentarea">
-
-<p>Your search has encounted an error. You have incorrectly entered information into one or more of the fields.<br/>
-Please check that you have entered in the correct information into the fields and navigate back to the search page. <br/>
-Thank you</p>
+<h1>OOPS</h1>
+<p>Your search has encounted an error.</p>
+<p> You have incorrectly entered information into one or more of the fields.</p>
+<p>Please check that you have entered in the correct information into the fields and navigate back to the search page.</p>
+<p>Thank you</p>
 
 <a href = "../search.php">Search Again </a>
 
