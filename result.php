@@ -2,15 +2,13 @@
 session_start();
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<!DOCTYPE html>
 <!-- Declaring the doctype of the web pages which is XHTML Strict 1.0 -->
 
-<head> 
-<title></title>
-<link type="text/css" rel="stylesheet" href="css/stylesheet.css" /> <!-- links to the css stylesheet that the website is using--> 
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<head>
+<title>Winestore Database Results</title>
+<link type="text/css" rel="stylesheet" href="css/stylesheet.css" /> <!-- links to the css stylesheet that the website is using-->
+<meta charset="UTF-8">
 </head>
 
 <body>
@@ -21,11 +19,15 @@ session_start();
 <div class = "menu"></div> <!-- close menu --> 
 <div class = "resultarea">
 
+<h1>Search Results</h1>
+
 <?php
 
-	echo "<table border='1'>
+$count = count($_SESSION['queryresult']);
+echo "<p>Total search records fitting your criteria: " . $count . "</p>";
+
+	echo "<table>
 	<tr>
-	<th>Wine ID</th>
 	<th>Wine Name</th>
 	<th>Wine Year</th>
 	<th>Wine Variety</th>
@@ -34,6 +36,7 @@ session_start();
 	<th>Cost In Inventory</th>
 	<th>Total Stock Sold</th>
 	<th>Total Wine Sales</th>
+	<th>Total Wine On Hand </th>
 	</tr>";
 
 	foreach($_SESSION['queryresult'] as $row)

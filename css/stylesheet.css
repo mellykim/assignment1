@@ -1,28 +1,33 @@
 .container{
-	width: 1920px;
-	background-color: #38163a;
-	padding-bottom: 100px;
-	padding-top: 50px;
+	background-image: url(../images/wine2.jpg);
+	background-size: 1920px;
+	background-repeat: no-repeat;
+	padding-bottom:100px;
+	padding-top: 100px;
+	margin: auto;
 }
 
 
 .contentarea {
 	width: 400px;
-        margin: auto;
+	min-height: 1100px;
+	margin: auto;
         background-color: white;
-        padding: 20px 150px 50px 120px;
-        border-radius: 15px 50px;
+        padding: 25px 150px 50px 120px;
         font-family: "Arial", "Times New Roman";
         font-size: 15px;
+	box-shadow: 10px 10px 50px #888888;
+	border-radius:25px;
 }
 
 .resultarea {
 	padding : 50px 50px 50px 50px;
 	background-color:white;
-	width: 1500px;
+	width: 1200px;
 	margin: auto;
-	border-radius: 15px 50px;
-
+	box-shadow: 10px 10px 50px #888888;
+	border-radius: 25px;
+	min-height: 1000px;
 }
 
 table {
@@ -62,7 +67,7 @@ input, select {
 	width: 400px;
 }
 
-#year {
+.year {
 	width: 100px;
 }
 
